@@ -3,11 +3,12 @@
 /**
  * @param $link
  * @param $id
+ * @param string $columns
  * @return array|null
  */
-function getArticle($link, $id) {
+function getArticle($link, $id, $columns = "*") {
 
-    $sql = "SELECT * FROM article WHERE id = ?";
+    $sql = "SELECT $columns FROM article WHERE id = ?";
 
     $stmt = mysqli_prepare($link, $sql);
 

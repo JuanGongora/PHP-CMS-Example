@@ -9,14 +9,10 @@ if (isset($_GET["id"])) {
     //the getDB() is inside because we are first using the conditional to check if we need it, thus only loading the db from the require when we need it
     $link = getDB();
 
-    $article = getArticle($link, $_GET["id"]);
+    $article = getArticle($link, $_GET["id"], "id");
 
     if ($article) {
         $id = $article["id"];
-        $title = $article["title"];
-        $content = $article["content"];
-        //extra content added below in order to resolve compatibility issue with other browsers
-        $published_at = str_replace('T', ' ', $article['published_at']);
     } else {
         die("There's no article to edit with that id...");
     }
