@@ -27,6 +27,7 @@ if (isset($_GET["id"])) {
     <p><?= htmlspecialchars($article["content"]); ?></p><br>
 <?php endif; ?>
 
-<a href="edit-article.php?id=<?= $article["id"] ?>">Edit Article</a>
+<a href="edit-article.php?id=<?= $article["id"] ?>">Edit Article</a><br>
+<a href="delete-article.php?id=<?= $article["id"] ?>">Delete Article</a>
 
 <?php include "includes/footer.php"; ?>

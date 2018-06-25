@@ -2,6 +2,7 @@
 
 require "includes/database.php";
 require "includes/article.php";
+require "includes/url.php";
 
 if (isset($_GET["id"])) {
 
