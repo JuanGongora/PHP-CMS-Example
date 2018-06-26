@@ -8,6 +8,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($_POST["username"] == "juan" && $_POST["password"] == "pass") {
 
+        //passing in the value of true below deletes the old session
+        //and then creates a new one, while keeping current session information maintained
+        //doing this helps to prevent session fixation attacks
+        session_regenerate_id(true);
+
         $_SESSION["is_logged_in"] = true;
 
         redirect("/index.php");

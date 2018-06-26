@@ -1,6 +1,7 @@
 <?php
 
 include "includes/database.php";
+include "includes/auth.php";
 
 //starts the cookie track
 session_start();
@@ -21,17 +22,16 @@ if ($result === FALSE) {
 
 <?php include "includes/header.php"; ?>
 
-<?php if (isset($_SESSION["is_logged_in"]) && $_SESSION["is_logged_in"]): ?>
+<?php if (isLoggedIn()): ?>
 
     <p>You are logged in. <a href="logout.php">Log out</a></p>
+    <a href="new-article.php">New article</a><br>
 
 <?php else: ?>
 
     <p>You are not logged in. <a href="login.php">Log in</a></p>
 
 <?php endif; ?>
-
-    <a href="new-article.php">New article</a>
 
     <?php if (empty($articles)): ?>
         <p>There's nothing new here.</p>

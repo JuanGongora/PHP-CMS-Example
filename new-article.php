@@ -3,6 +3,14 @@
 require "includes/database.php";
 require "includes/article.php";
 require "includes/url.php";
+require "includes/auth.php";
+
+session_start();
+
+//check to see that the user is allowed to make article
+if (!isLoggedIn()) {
+    die("unauthorized");
+}
 
 //by making a container for errors, we are able to report multiple errors instead of one
 $title = "";
