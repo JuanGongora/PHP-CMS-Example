@@ -2,6 +2,9 @@
 
 include "includes/database.php";
 
+//starts the cookie track
+session_start();
+
 $link = getDB();
 
 $sql = "SELECT * FROM article ORDER BY published_at;";
@@ -17,6 +20,16 @@ if ($result === FALSE) {
 ?>
 
 <?php include "includes/header.php"; ?>
+
+<?php if (isset($_SESSION["is_logged_in"]) && $_SESSION["is_logged_in"]): ?>
+
+    <p>You are logged in. <a href="logout.php">Log out</a></p>
+
+<?php else: ?>
+
+    <p>You are not logged in. <a href="login.php">Log in</a></p>
+
+<?php endif; ?>
 
     <a href="new-article.php">New article</a>
 
