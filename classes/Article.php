@@ -51,4 +51,27 @@ class Article {
         }
     }
 
+    /**
+     * @param $link
+     * @return mixed
+     */
+    public function update($link) {
+
+        $sql = "UPDATE article SET title = :title, content = :content, published_at = :published_at WHERE id = :id";
+
+        $stmt = $link->prepare($sql);
+
+        $stmt->bindValue(":id", $this->id, PDO::PARAM_INT);
+        $stmt->bindValue(":title", $this->title, PDO::PARAM_STR);
+        $stmt->bindValue(":content", $this->content, PDO::PARAM_STR);
+
+        if ($this->published_at == "") {
+            $stmt->bindValue(":published_at", null, PDO::PARAM_NULL);
+        } else {
+            $stmt->bindValue(":published_at", $this->published_at, PDO::PARAM_STR);
+
+        }
+        return $stmt->execute();
+    }
+
 }
