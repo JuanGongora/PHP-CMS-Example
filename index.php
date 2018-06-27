@@ -1,21 +1,22 @@
 <?php
 
-include "includes/database.php";
+include "classes/Database.php";
 include "includes/auth.php";
 
 //starts the cookie track
 session_start();
 
-$link = getDB();
+$db = new Database();
+$link = $db->getConn();
 
 $sql = "SELECT * FROM article ORDER BY published_at;";
 
-$result = mysqli_query($link, $sql);
+$result = $link->query($sql);
 
 if ($result === FALSE) {
-    echo mysqli_error($link);
+    var_dump($link->errorInfo());
 } else {
-    $articles = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $articles = $result->fetchAll(PDO::FETCH_ASSOC);
 }
 
 ?>

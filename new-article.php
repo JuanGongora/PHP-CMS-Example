@@ -12,7 +12,6 @@ if (!isLoggedIn()) {
     die("unauthorized");
 }
 
-//by making a container for errors, we are able to report multiple errors instead of one
 $title = "";
 $content = "";
 $published_at = "";
@@ -24,6 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //extra content added below in order to resolve compatibility issue with other browsers
     $published_at = str_replace('T', ' ', $_POST['published_at']);
 
+    //by making a container for errors, we are able to report multiple errors instead of one
     $errors = validateArticle($title, $content, $published_at);
 
     //if array is empty of errors
