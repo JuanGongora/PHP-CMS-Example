@@ -1,6 +1,7 @@
 <?php
 
 include "classes/Database.php";
+include "classes/Article.php";
 include "includes/auth.php";
 
 //starts the cookie track
@@ -9,15 +10,7 @@ session_start();
 $db = new Database();
 $link = $db->getConn();
 
-$sql = "SELECT * FROM article ORDER BY published_at;";
-
-$result = $link->query($sql);
-
-if ($result === FALSE) {
-    var_dump($link->errorInfo());
-} else {
-    $articles = $result->fetchAll(PDO::FETCH_ASSOC);
-}
+$articles = Article::getAll($link);
 
 ?>
 

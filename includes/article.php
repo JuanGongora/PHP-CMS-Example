@@ -8,24 +8,16 @@
  */
 function getArticle($link, $id, $columns = "*") {
 
-    $sql = "SELECT $columns FROM article WHERE id = ?";
+    $sql = "SELECT $columns FROM article WHERE id = :id";
 
-    $stmt = mysqli_prepare($link, $sql);
+    $stmt = $link->prepare($sql);
 
-    if ($stmt === false) {
+    //the prepared statement
+    $stmt->bindValue(":id", $id, PDO::PARAM_INT);
 
-        echo mysqli_error($link);
-    } else {
+    if ($stmt->execute()) {
 
-        //the prepared statement
-        mysqli_stmt_bind_param($stmt, "i", $id);
-
-            if (mysqli_stmt_execute($stmt)) {
-
-                $results = mysqli_stmt_get_result($stmt);
-
-                return mysqli_fetch_array($results, MYSQLI_ASSOC);
-            }
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }
 

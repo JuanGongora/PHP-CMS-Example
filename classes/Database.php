@@ -13,11 +13,20 @@ class Database {
         $db_name = "cms";
         $db_user = "cms_www";
         $db_pass = "pass";
-//        $db_port = "3307";
 
         $dsn = "mysql:host=" .$db_host . ";dbname=" . $db_name . ";charset=utf8";
 
-        return $conn = new PDO($dsn, $db_user, $db_pass);
+        try {
+            $link = new PDO($dsn, $db_user, $db_pass);
+
+            $link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            return $link;
+
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            exit;
+        }
     }
 
 }

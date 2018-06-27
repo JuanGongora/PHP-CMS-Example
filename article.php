@@ -1,14 +1,15 @@
 <?php
 
-include "includes/database.php";
+include "classes/Database.php";
+include "classes/Article.php";
 include "includes/article.php";
 
 if (isset($_GET["id"])) {
 
-    //the getDB() is inside because we are first using the conditional to check if we need it, thus only loading the db from the require when we need it
-    $link = getDB();
+    $db = new Database();
+    $link = $db->getConn();
 
-    $article = getArticle($link, $_GET["id"]);
+    $article = Article::getByID($link, $_GET["id"]);
 
     } else {
 
@@ -20,11 +21,11 @@ if (isset($_GET["id"])) {
 
 <?php include "includes/header.php"; ?>
 
-<?php if ($article === null): ?>
-    <p>There's nothing new here.</p>
-<?php else: ?>
+<?php if ($article): ?>
     <h2><?= htmlspecialchars($article["title"]); ?></h2>
     <p><?= htmlspecialchars($article["content"]); ?></p><br>
+<?php else: ?>
+    <p>There's nothing new here.</p>
 <?php endif; ?>
 
 <a href="edit-article.php?id=<?= $article["id"] ?>">Edit Article</a><br>
