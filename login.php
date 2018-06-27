@@ -1,12 +1,17 @@
 <?php
 
 require "includes/url.php";
+require "classes/User.php";
+require "classes/Database.php";
 
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    if ($_POST["username"] == "juan" && $_POST["password"] == "pass") {
+    $db = new Database();
+    $link = $db->getConn();
+
+    if (User::authenticate($link, $_POST["username"], $_POST["password"])) {
 
         //passing in the value of true below deletes the old session
         //and then creates a new one, while keeping current session information maintained

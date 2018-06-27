@@ -2,7 +2,6 @@
 
 include "classes/Database.php";
 include "classes/Article.php";
-include "includes/article.php";
 
 if (isset($_GET["id"])) {
 

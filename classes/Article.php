@@ -109,6 +109,7 @@ class Article {
             }
         }
 
+        //we want this to return a true statement, if not then it returns the errors (false)
         return empty($this->errors);
     }
 
