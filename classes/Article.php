@@ -127,4 +127,35 @@ class Article {
         return $stmt->execute();
 
     }
+
+    public function create($link) {
+
+        if ($this->validate()) {
+
+
+            $sql = "INSERT INTO article (title, content, published_at) VALUES (:title, :content, :published_at)";
+
+            $stmt = $link->prepare($sql);
+
+            $stmt->bindValue(":title", $this->title, PDO::PARAM_STR);
+            $stmt->bindValue(":content", $this->content, PDO::PARAM_STR);
+
+            if ($this->published_at == "") {
+                $stmt->bindValue(":published_at", null, PDO::PARAM_NULL);
+            } else {
+                $stmt->bindValue(":published_at", $this->published_at, PDO::PARAM_STR);
+
+            }
+
+            //if statement is true, we can assign this instance the id that SQL auto-generated on the DB for it
+            if ($stmt->execute()) {
+                //returns the id of the last inserted row or sequence value (PDO method)
+                $this->id = $link->lastInsertID();
+                return true;
+            }
+        } else {
+            return false;
+        }
+    }
+
 }

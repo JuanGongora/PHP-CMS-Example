@@ -1,6 +1,7 @@
 <?php
 
-require "includes/database.php";
+require "classes/Database.php";
+require "classes/Article.php";
 require "includes/article.php";
 require "includes/url.php";
 require "includes/auth.php";
@@ -12,58 +13,25 @@ if (!isLoggedIn()) {
     die("unauthorized");
 }
 
-$title = "";
-$content = "";
-$published_at = "";
+$article = new Article();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $title = $_POST["title"];
-    $content = $_POST["content"];
+    $db = new Database();
+    $link = $db->getConn();
+
+    $article->title = $_POST["title"];
+    $article->content = $_POST["content"];
     //extra content added below in order to resolve compatibility issue with other browsers
-    $published_at = str_replace('T', ' ', $_POST['published_at']);
-
-    //by making a container for errors, we are able to report multiple errors instead of one
-    $errors = validateArticle($title, $content, $published_at);
-
-    //if array is empty of errors
-    if(empty($errors)) {
+    $article->published_at = str_replace('T', ' ', $_POST['published_at']);
 
 
-        //the getDB() is inside because we are first using the conditional to check if we need it,
-        //loading the db from the require when used, also assigned to variable so the return of $link from database.php is the value here
-        $link = getDB();
+    if ($article->create($link)) {
 
-        $sql = "INSERT INTO article (title, content, published_at) VALUES (?, ?, ?)";
+        redirect("/article.php?id={$article->id}");
 
-        // mysqli_escape_string($link, $_POST["content"])
-        //the mysqli_escape_string can also be used to help prevent sql injections
-
-        $result = mysqli_prepare($link, $sql);
-
-        if ($result === FALSE) {
-
-            echo mysqli_error($link);
-
-        } else {
-
-            if ($published_at == "") {
-                $published_at == NULL;
-            }
-
-            mysqli_stmt_bind_param($result, "sss", $title, $content, $published_at);
-
-            if (mysqli_stmt_execute($result)) {
-
-                $id = mysqli_insert_id($link);
-
-                redirect("/article.php?id=$id");
-
-            } else {
-                echo mysqli_stmt_error($result);
-            }
-        }
     }
+
 }
 
 ?>
