@@ -5,6 +5,11 @@
  */
 class Article {
 
+    public $id;
+    public $title;
+    public $content;
+    public $published_at;
+
     /**
      * @param $link
      * @return mixed
@@ -24,7 +29,7 @@ class Article {
      * @param $link
      * @param $id
      * @param string $columns
-     * @return array|null
+     * @return mixed
      *
      * this method is not called on an instance of this class, so it should also be static
      */
@@ -37,9 +42,12 @@ class Article {
         //the prepared statement
         $stmt->bindValue(":id", $id, PDO::PARAM_INT);
 
+        //if a record with the id is found, an object of the Article class will be returned this time
+        $stmt->setFetchMode(PDO::FETCH_CLASS, "Article");
+
         if ($stmt->execute()) {
 
-            return $stmt->fetch(PDO::FETCH_ASSOC);
+            return $stmt->fetch();
         }
     }
 
