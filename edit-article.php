@@ -2,7 +2,6 @@
 
 require "classes/Database.php";
 require "classes/Article.php";
-require "includes/article.php";
 require "includes/url.php";
 
 if (isset($_GET["id"])) {
@@ -18,8 +17,7 @@ if (isset($_GET["id"])) {
 }
 else {
 
-    echo "This is bullshit, try again...";
-//    $article = null;
+    die("This is bullshit, try again...");
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -29,18 +27,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //extra content added below in order to resolve compatibility issue with other browsers
     $article->published_at = str_replace('T', ' ', $_POST['published_at']);
 
-    $errors = validateArticle($article->title, $article->content, $article->published_at);
-
-    //if array is empty of errors, or is non-existant
-    if (empty($errors)) {
 
         if ($article->update($link)) {
 
             redirect("/article.php?id={$article->id}");
 
         }
-    }
 }
+
 ?>
 
 <?php include "includes/header.php"; ?>

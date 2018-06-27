@@ -1,5 +1,5 @@
-<?php if(! empty($errors)): ?>
-    <?php foreach ($errors as $error): ?>
+<?php if(! empty($article->errors)): ?>
+    <?php foreach ($article->errors as $error): ?>
         <ul>
             <ol><strong><?= $error ?></strong></ol>
         </ul>

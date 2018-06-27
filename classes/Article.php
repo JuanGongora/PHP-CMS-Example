@@ -9,6 +9,7 @@ class Article {
     public $title;
     public $content;
     public $published_at;
+    public $errors;
 
     /**
      * @param $link
@@ -42,7 +43,7 @@ class Article {
         //the prepared statement
         $stmt->bindValue(":id", $id, PDO::PARAM_INT);
 
-        //if a record with the id is found, an object of the Article class will be returned this time
+        //if a record with the id is found, an object of the Article class will be returned this time, allowing you to use its public variables
         $stmt->setFetchMode(PDO::FETCH_CLASS, "Article");
 
         if ($stmt->execute()) {
@@ -57,21 +58,73 @@ class Article {
      */
     public function update($link) {
 
-        $sql = "UPDATE article SET title = :title, content = :content, published_at = :published_at WHERE id = :id";
+        if ($this->validate()) {
+
+
+            $sql = "UPDATE article SET title = :title, content = :content, published_at = :published_at WHERE id = :id";
+
+            $stmt = $link->prepare($sql);
+
+            $stmt->bindValue(":id", $this->id, PDO::PARAM_INT);
+            $stmt->bindValue(":title", $this->title, PDO::PARAM_STR);
+            $stmt->bindValue(":content", $this->content, PDO::PARAM_STR);
+
+            if ($this->published_at == "") {
+                $stmt->bindValue(":published_at", null, PDO::PARAM_NULL);
+            } else {
+                $stmt->bindValue(":published_at", $this->published_at, PDO::PARAM_STR);
+
+            }
+            return $stmt->execute();
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @return bool error
+     *
+     * we aren't going to call this method outside of the class so it should be protected, scope will be to class and its children
+     */
+    protected function validate() {
+
+        if ($this->title == "") {
+            $this->errors[] = "Title is required";
+        }
+        if ($this->content == "") {
+            $this->errors[] = "Content is required";
+        }
+        if ($this->published_at != "") {
+
+            $date_time = date_create_from_format("y--M-D H:i:s", $this->published_at);
+
+            if ($date_time === FALSE) {
+                $this->errors[] = "Invalid date and time";
+            } else {
+                $date_errors = date_get_last_errors();
+
+                if ($date_errors["warning_count"] > 0) {
+                    $this->errors[] = "Invalid date and time";
+                }
+            }
+        }
+
+        return empty($this->errors);
+    }
+
+    /**
+     * @param $link
+     * @return mixed
+     */
+    public function delete($link) {
+
+        $sql = "DELETE FROM article WHERE id = :id";
 
         $stmt = $link->prepare($sql);
 
         $stmt->bindValue(":id", $this->id, PDO::PARAM_INT);
-        $stmt->bindValue(":title", $this->title, PDO::PARAM_STR);
-        $stmt->bindValue(":content", $this->content, PDO::PARAM_STR);
 
-        if ($this->published_at == "") {
-            $stmt->bindValue(":published_at", null, PDO::PARAM_NULL);
-        } else {
-            $stmt->bindValue(":published_at", $this->published_at, PDO::PARAM_STR);
-
-        }
         return $stmt->execute();
-    }
 
+    }
 }
