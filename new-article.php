@@ -3,9 +3,7 @@
 require "includes/init.php";
 
 //check to see that the user is allowed to make article
-if (!Auth::isLoggedIn()) {
-    die("unauthorized");
-}
+Auth::requireLogin();
 
 $article = new Article();
 

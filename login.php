@@ -8,12 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (User::authenticate($link, $_POST["username"], $_POST["password"])) {
 
-        //passing in the value of true below deletes the old session
-        //and then creates a new one, while keeping current session information maintained
-        //doing this helps to prevent session fixation attacks
-        session_regenerate_id(true);
-
-        $_SESSION["is_logged_in"] = true;
+        Auth::login();
 
         Url::redirect("/index.php");
 
