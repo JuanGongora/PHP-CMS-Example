@@ -1,11 +1,8 @@
 <?php
 
-include "classes/Database.php";
-include "classes/Article.php";
-include "classes/Auth.php";
+require "includes/init.php";
 
 //starts the cookie track
-session_start();
 
 $db = new Database();
 $link = $db->getConn();

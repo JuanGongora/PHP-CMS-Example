@@ -1,11 +1,6 @@
 <?php
 
-require "classes/Database.php";
-require "classes/Article.php";
-require "classes/Url.php";
-require "classes/Auth.php";
-
-session_start();
+require "includes/init.php";
 
 //check to see that the user is allowed to make article
 if (!Auth::isLoggedIn()) {

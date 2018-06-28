@@ -1,8 +1,6 @@
 <?php
 
-require "classes/Database.php";
-require "classes/Article.php";
-require "classes/Url.php";
+require "includes/init.php";
 
 if (isset($_GET["id"])) {
 
