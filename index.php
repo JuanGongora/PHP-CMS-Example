@@ -2,10 +2,8 @@
 
 require "includes/init.php";
 
-//starts the cookie track
-
-$db = new Database();
-$link = $db->getConn();
+//you can assign variables to require files, making them quite dynamic
+$link = require "includes/db.php";
 
 $articles = Article::getAll($link);
 

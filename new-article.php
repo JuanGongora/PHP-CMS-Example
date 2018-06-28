@@ -11,8 +11,7 @@ $article = new Article();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $db = new Database();
-    $link = $db->getConn();
+    $link = require "includes/db.php";
 
     $article->title = $_POST["title"];
     $article->content = $_POST["content"];

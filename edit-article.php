@@ -4,8 +4,7 @@ require "includes/init.php";
 
 if (isset($_GET["id"])) {
 
-    $db = new Database();
-    $link = $db->getConn();
+    $link = require "includes/db.php";
 
     $article = Article::getByID($link, $_GET["id"]);
 
