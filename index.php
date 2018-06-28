@@ -2,7 +2,7 @@
 
 include "classes/Database.php";
 include "classes/Article.php";
-include "includes/auth.php";
+include "classes/Auth.php";
 
 //starts the cookie track
 session_start();
@@ -16,7 +16,7 @@ $articles = Article::getAll($link);
 
 <?php include "includes/header.php"; ?>
 
-<?php if (isLoggedIn()): ?>
+<?php if (Auth::isLoggedIn()): ?>
 
     <p>You are logged in. <a href="logout.php">Log out</a></p>
     <a href="new-article.php">New article</a><br>

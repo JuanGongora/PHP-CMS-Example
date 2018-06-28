@@ -2,13 +2,13 @@
 
 require "classes/Database.php";
 require "classes/Article.php";
-require "includes/url.php";
-require "includes/auth.php";
+require "classes/Url.php";
+require "classes/Auth.php";
 
 session_start();
 
 //check to see that the user is allowed to make article
-if (!isLoggedIn()) {
+if (!Auth::isLoggedIn()) {
     die("unauthorized");
 }
 
@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($article->create($link)) {
 
-        redirect("/article.php?id={$article->id}");
+        Url::redirect("/article.php?id={$article->id}");
 
     }
 

@@ -9,7 +9,6 @@ class User {
     public $username;
     public $password;
 
-
     /**
      * @param $link
      * @param $username
@@ -33,7 +32,8 @@ class User {
         //fetch results into an object variable (not an array thanks to setFetchMode conversion) after execution
         if ($user = $stmt->fetch()) {
             //when true it will trigger login.php to accept authentication
-            return $user->password == $password;
+            //also using function that checks algorithm, cost, and salt of the password hash
+            return password_verify($password, $user->password);
         }
     }
 }

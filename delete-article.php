@@ -2,7 +2,7 @@
 
 require "classes/Database.php";
 require "classes/Article.php";
-require "includes/url.php";
+require "classes/Url.php";
 
 if (isset($_GET["id"])) {
 
@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($article->delete($link)) {
 
-            redirect("/index.php");
+            Url::redirect("/index.php");
 
         }
     }
