@@ -6,7 +6,7 @@ require "includes/init.php";
 $link = require "includes/db.php";
 
 //coalescing operator puts conditional WITHIN the argument to see if it should set default pg 1 or requested pg num
-$paginator = new Paginator($_GET["page"] ?? 1, 5);
+$paginator = new Paginator($_GET["page"] ?? 1, 5, Article::getTotal($link));
 
 $articles = Article::getPage($link, $paginator->limit, $paginator->offset);
 
@@ -26,6 +26,7 @@ $articles = Article::getPage($link, $paginator->limit, $paginator->offset);
     <nav>
         <ul>
             <li>
+                <!-- checks conditional true statement from Paginator -->
                 <?php if ($paginator->previous): ?>
                     <a href="?page=<?= $paginator->previous ?>">Previous</a>
                 <?php else: ?>
@@ -33,7 +34,12 @@ $articles = Article::getPage($link, $paginator->limit, $paginator->offset);
                 <?php endif; ?>
             </li>
             <li>
-                <a href="?page=<?= $paginator->next ?>">Next</a>
+                <!-- checks conditional true statement from Paginator -->
+                <?php if ($paginator->next): ?>
+                    <a href="?page=<?= $paginator->next ?>">Next</a>
+                <?php else: ?>
+                    Next
+                <?php endif; ?>
             </li>
         </ul>
     </nav>

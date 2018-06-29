@@ -179,4 +179,20 @@ class Article {
         }
     }
 
+    /**
+     * Gets total count of articles
+     *
+     * @param $link connects to database
+     *
+     * @return integer of total records
+     */
+    public static function getTotal($link) {
+
+        $sql = "SELECT COUNT(*) FROM article";
+
+        //query and fetchColumn are object methods from PDO, as $link becomes a child of PDO
+        //fetchColumn allows me to grab the requested output from the resulting called column
+        return $link->query($sql)->fetchColumn(0);
+
+    }
 }
