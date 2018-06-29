@@ -1,10 +1,12 @@
 <?php
 
-require "includes/init.php";
+require "../includes/init.php";
+
+Auth::requireLogin();
 
 if (isset($_GET["id"])) {
 
-    $link = require "includes/db.php";
+    $link = require "../includes/db.php";
 
     $article = Article::getByID($link, $_GET["id"]);
 
@@ -16,7 +18,7 @@ if (isset($_GET["id"])) {
 
 ?>
 
-<?php include "includes/header.php"; ?>
+<?php include "../includes/header.php"; ?>
 
 <?php if ($article): ?>
     <h2><?= htmlspecialchars($article->title); ?></h2>
@@ -25,4 +27,7 @@ if (isset($_GET["id"])) {
     <p>There's nothing new here.</p>
 <?php endif; ?>
 
-<?php include "includes/footer.php"; ?>
+<a href="edit-article.php?id=<?= $article->id ?>">Edit Article</a><br>
+<a href="delete-article.php?id=<?= $article->id ?>">Delete Article</a>
+
+<?php include "../includes/footer.php"; ?>

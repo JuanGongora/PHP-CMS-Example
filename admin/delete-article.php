@@ -1,10 +1,12 @@
 <?php
 
-require "includes/init.php";
+require "../includes/init.php";
+
+Auth::requireLogin();
 
 if (isset($_GET["id"])) {
 
-    $link = require "includes/db.php";
+    $link = require "../includes/db.php";
 
     $article = Article::getByID($link, $_GET["id"]);
 
@@ -22,23 +24,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($article->delete($link)) {
 
-            Url::redirect("/index.php");
+            Url::redirect("/admin/index.php");
 
         }
     }
 
 ?>
 
-<?php include "includes/header.php"; ?>
+<?php include "../includes/header.php"; ?>
 
 <h2>Delete Article</h2>
 
 <form method="post">
     <p>Are you sure?</p>
     <button>Delete Article</button>
-    <a href="article.php?id=<?= $article->id ?>">Cancel</a>
+    <a href="../article.php?id=<?= $article->id ?>">Cancel</a>
 
 </form>
 
-<?php include "includes/footer.php"; ?>
+<?php include "../includes/footer.php"; ?>
 

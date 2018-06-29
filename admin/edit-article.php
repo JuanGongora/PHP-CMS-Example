@@ -1,10 +1,12 @@
 <?php
 
-require "includes/init.php";
+require "../includes/init.php";
+
+Auth::requireLogin();
 
 if (isset($_GET["id"])) {
 
-    $link = require "includes/db.php";
+    $link = require "../includes/db.php";
 
     $article = Article::getByID($link, $_GET["id"]);
 
@@ -27,17 +29,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($article->update($link)) {
 
-            Url::redirect("/article.php?id={$article->id}");
+            Url::redirect("/admin/article.php?id={$article->id}");
 
         }
 }
 
 ?>
 
-<?php include "includes/header.php"; ?>
+<?php include "../includes/header.php"; ?>
 
 <h2>Edit Article</h2>
 
 <?php include "includes/article-form.php"; ?>
 
-<?php include "includes/footer.php"; ?>
+<?php include "../includes/footer.php"; ?>
