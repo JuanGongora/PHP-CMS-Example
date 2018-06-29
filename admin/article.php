@@ -28,6 +28,7 @@ if (isset($_GET["id"])) {
 <?php endif; ?>
 
 <a href="edit-article.php?id=<?= $article->id ?>">Edit Article</a><br>
-<a href="delete-article.php?id=<?= $article->id ?>">Delete Article</a>
+<a href="delete-article.php?id=<?= $article->id ?>">Delete Article</a><br>
+<a href="edit-article-image.php?id=<?= $article->id ?>">Edit Image</a>
 
 <?php include "../includes/footer.php"; ?>
