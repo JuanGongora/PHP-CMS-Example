@@ -58,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
 
         //$finfo resource returned by finfo_open(), with the second parameter in
-        //finfo_file() being the name of a file to be checked by the HTTP File Upload variables
+        //finfo_file() being the name of a file to be checked by the HTTP File Upload var`iables
         $mime_type = finfo_file($finfo, $_FILES["file"]["tmp_name"]);
         //files uploaded are temporarily saved at: $_FILES["file"]["tmp_name"] of array
 
@@ -67,6 +67,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (!in_array($mime_type, $mime_types)) {
             throw new Exception("Invalid file type");
         }
+
+        //return info about file
+        $pathinfo = pathinfo($_FILES["file"]["name"]);
+
+        //function pathinfo() has 4 paths to know: dirname, basename, extension, filename
+        $base = $pathinfo["filename"];
+
+        //replaces any characters that shouldn't be allowed, with last argument $base being the file to apply the function into
+        $base = preg_replace('/[^a-zA-Z0-9_-]/', '_', $base);
+
+        //rebuild sanitized filename to upload into DB
+        $filename = $base . "." . $pathinfo["extension"];
+
+        $destination = "../uploads/$filename";
+
+        //https://stackoverflow.com/questions/37008227/what-is-the-difference-between-name-and-tmp-name/43566165#43566165
+       if (move_uploaded_file($_FILES["file"]["tmp_name"], $destination)) {
+           echo "File uploaded successfully";
+       } else {
+
+           throw new Exception("Unable to move uploaded file");
+       }
 
     } catch (Exception $e) {
         //the catch outputs the errors for us after they were thrown above
