@@ -5,7 +5,10 @@ require "includes/init.php";
 //you can assign variables to require files, making them quite dynamic
 $link = require "includes/db.php";
 
-$articles = Article::getAll($link);
+//super neat ternary puts conditional WITHIN the argument to see if it should set default pg 1 or requested page num
+$paginator = new Paginator(isset($_GET["page"]) ? $_GET["page"] : 1, 5);
+
+$articles = Article::getPage($link, $paginator->limit, $paginator->offset);
 
 ?>
 

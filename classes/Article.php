@@ -28,6 +28,26 @@ class Article {
 
     /**
      * @param $link
+     * @param $limit
+     * @param $offset
+     * @return mixed
+     */
+    public static function getPage($link, $limit, $offset) {
+
+        $sql = "SELECT * FROM article ORDER BY published_at LIMIT :limit OFFSET :offset";
+
+        $stmt = $link->prepare($sql);
+
+        $stmt->bindValue(":limit", $limit, PDO::PARAM_INT);
+        $stmt->bindValue(":offset", $offset, PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+    /**
+     * @param $link
      * @param $id
      * @param string $columns
      * @return mixed
