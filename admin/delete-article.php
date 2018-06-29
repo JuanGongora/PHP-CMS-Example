@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <form method="post">
     <p>Are you sure?</p>
     <button>Delete Article</button>
-    <a href="../article.php?id=<?= $article->id ?>">Cancel</a>
+    <a href="/admin/article.php?id=<?= $article->id ?>">Cancel</a>
 
 </form>
 

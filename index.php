@@ -18,31 +18,14 @@ $articles = Article::getPage($link, $paginator->limit, $paginator->offset);
     <?php if (empty($articles)): ?>
         <p>There's nothing new here.</p>
     <?php else: ?>
+
         <?php foreach ($articles as $article): ?>
             <h2><a href="article.php?id=<?= $article['id']; ?>"><?= $article["title"]; ?></a></h2>
             <p><?= $article["content"]; ?></p>
         <?php endforeach; ?>
 
-    <nav>
-        <ul>
-            <li>
-                <!-- checks conditional true statement from Paginator -->
-                <?php if ($paginator->previous): ?>
-                    <a href="?page=<?= $paginator->previous ?>">Previous</a>
-                <?php else: ?>
-                    Previous
-                <?php endif; ?>
-            </li>
-            <li>
-                <!-- checks conditional true statement from Paginator -->
-                <?php if ($paginator->next): ?>
-                    <a href="?page=<?= $paginator->next ?>">Next</a>
-                <?php else: ?>
-                    Next
-                <?php endif; ?>
-            </li>
-        </ul>
-    </nav>
+    <?php require "includes/pagination.php"; ?>
+
     <?php endif; ?>
 
 <?php include "includes/footer.php"; ?>

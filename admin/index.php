@@ -7,7 +7,10 @@ Auth::requireLogin();
 //you can assign variables to require files, making them quite dynamic
 $link = require "../includes/db.php";
 
-$articles = Article::getAll($link);
+//coalescing operator puts conditional WITHIN the argument to see if it should set default pg 1 or requested pg num
+$paginator = new Paginator($_GET["page"] ?? 1, 6, Article::getTotal($link));
+
+$articles = Article::getPage($link, $paginator->limit, $paginator->offset);
 
 ?>
 
@@ -33,6 +36,9 @@ $articles = Article::getAll($link);
         <?php endforeach; ?>
         </tbody>
     </table>
+
+    <?php require "../includes/pagination.php";?>
+
     <?php endif; ?>
 
 <?php include "../includes/footer.php"; ?>
