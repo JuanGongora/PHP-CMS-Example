@@ -5,8 +5,8 @@ require "includes/init.php";
 //you can assign variables to require files, making them quite dynamic
 $link = require "includes/db.php";
 
-//super neat ternary puts conditional WITHIN the argument to see if it should set default pg 1 or requested page num
-$paginator = new Paginator(isset($_GET["page"]) ? $_GET["page"] : 1, 5);
+//coalescing operator puts conditional WITHIN the argument to see if it should set default pg 1 or requested pg num
+$paginator = new Paginator($_GET["page"] ?? 1, 5);
 
 $articles = Article::getPage($link, $paginator->limit, $paginator->offset);
 
@@ -22,6 +22,21 @@ $articles = Article::getPage($link, $paginator->limit, $paginator->offset);
             <h2><a href="article.php?id=<?= $article['id']; ?>"><?= $article["title"]; ?></a></h2>
             <p><?= $article["content"]; ?></p>
         <?php endforeach; ?>
+
+    <nav>
+        <ul>
+            <li>
+                <?php if ($paginator->previous): ?>
+                    <a href="?page=<?= $paginator->previous ?>">Previous</a>
+                <?php else: ?>
+                    Previous
+                <?php endif; ?>
+            </li>
+            <li>
+                <a href="?page=<?= $paginator->next ?>">Next</a>
+            </li>
+        </ul>
+    </nav>
     <?php endif; ?>
 
 <?php include "includes/footer.php"; ?>
