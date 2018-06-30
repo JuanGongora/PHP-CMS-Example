@@ -103,6 +103,28 @@ class Article {
     }
 
     /**
+     * will be called on Article object to fetch its category, so not static
+     *
+     * @param $link
+     * @return mixed category data
+     */
+    public function getCategories($link) {
+
+        $sql = "SELECT category.*
+                FROM category
+                JOIN article_category
+                ON category.id = article_category.category_id
+                WHERE article_id = :id";
+
+        $stmt = $link->prepare($sql);
+        $stmt->bindValue(":id", $this->id, PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
      * @param $link
      * @return mixed
      */

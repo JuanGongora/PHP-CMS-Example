@@ -19,6 +19,9 @@ else {
     die("This is bullshit, try again...");
 }
 
+//test to see if categories get dumped at article edit
+var_dump($article->getCategories($link));
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $article->title = $_POST["title"];
