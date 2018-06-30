@@ -89,7 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         while (file_exists($destination)) {
 
-            //rebuild sanitized filename to upload into DB, using incrementer incase a user uploads same name file
+            //rebuild sanitized filename to upload into DB, using incrementer in case a user uploads same name file
             $filename = $base . "-{$i}." . $pathinfo["extension"];
             $destination = "../uploads/$filename";
 
@@ -99,9 +99,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         //https://stackoverflow.com/questions/37008227/what-is-the-difference-between-name-and-tmp-name/43566165#43566165
        if (move_uploaded_file($_FILES["file"]["tmp_name"], $destination)) {
 
+            $previous_image = $article->image_file;
+
             if ($article->setImageFile($link, $filename)) {
 
-                Url::redirect("/admin/article.php?id={$article->id}");
+                if ($previous_image) {
+
+                    //deletes old image to be replaced by new one
+                    unlink("../uploads/$previous_image");
+                }
+
+                Url::redirect("/admin/edit-article-image.php?id={$article->id}");
             }
 
        } else {
@@ -120,6 +128,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <?php include "../includes/header.php"; ?>
 
 <h2>Edit Article Image</h2>
+
+<?php if ($article->image_file): ?>
+    <img src="/uploads/<?= $article->image_file ?>">
+<?php endif; ?>
 
 <form method="post" enctype="multipart/form-data">
 
