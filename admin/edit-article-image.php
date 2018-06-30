@@ -119,7 +119,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     } catch (Exception $e) {
         //the catch outputs the errors for us after they were thrown above
-        echo $e->getMessage();
+        $error = $e->getMessage();
     }
 }
 
@@ -132,6 +132,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <?php if ($article->image_file): ?>
     <img src="/uploads/<?= $article->image_file ?>">
     <a href="delete-article-image.php?id=<?= $article->id ?>">Delete</a>
+<?php endif; ?>
+
+<?php if (isset($error)): ?>
+    <strong><?= $error ?></strong>
 <?php endif; ?>
 
 <form method="post" enctype="multipart/form-data">

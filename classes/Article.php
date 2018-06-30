@@ -73,6 +73,35 @@ class Article {
         }
     }
 
+
+    /**
+     * Get the article record based on the ID alon with assoc. categories, if any
+     *
+     * @param $link the database
+     * @param $id for article
+     * @return mixed article data with categories
+     */
+    public static function getWithCategories($link, $id) {
+
+        $sql = "SELECT article.*, category.name AS category_name
+                FROM article 
+                LEFT JOIN article_category 
+                ON article.id = article_category.article_id 
+                LEFT JOIN category 
+                ON article_category.category_id = category.id 
+                WHERE article.id = :id";
+
+        $stmt = $link->prepare($sql);
+
+        $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        //$stmt will most likely return an array of records so let's combine it into an assoc. array
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
     /**
      * @param $link
      * @return mixed
@@ -205,7 +234,7 @@ class Article {
      * @param $filename
      * @return mixed
      *
-     * this method is called on Article objects, hence it's not static
+     * this method is called on Article objects, hence it's not static, and can call it's variables
      */
     public function setImageFile($link, $filename) {
 

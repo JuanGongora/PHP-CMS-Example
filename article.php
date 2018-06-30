@@ -6,7 +6,7 @@ if (isset($_GET["id"])) {
 
     $link = require "includes/db.php";
 
-    $article = Article::getByID($link, $_GET["id"]);
+    $article = Article::getWithCategories($link, $_GET["id"]);
 
     } else {
 
@@ -19,13 +19,22 @@ if (isset($_GET["id"])) {
 <?php include "includes/header.php"; ?>
 
 <?php if ($article): ?>
-    <h2><?= htmlspecialchars($article->title); ?></h2>
+    <!-- doing var_dump($article); will show that internal array is at index 0 -->
+    <h2><?= htmlspecialchars($article[0]["title"]); ?></h2>
 
-    <?php if ($article->image_file): ?>
-        <img src="/uploads/<?= $article->image_file ?>">
+    <?php if ($article[0]["category_name"]): ?>
+        <p>Categories:
+            <?php foreach ($article as $internal_arr) : ?>
+                <strong><?= $internal_arr["category_name"] ?></strong>
+            <?php endforeach; ?>
+        </p>
     <?php endif; ?>
 
-    <p><?= htmlspecialchars($article->content); ?></p><br>
+    <?php if ($article[0]["image_file"]): ?>
+        <img src="/uploads/<?= $article[0]["image_file"] ?>">
+    <?php endif; ?>
+
+    <p><?= htmlspecialchars($article[0]["content"]); ?></p><br>
 <?php else: ?>
     <p>There's nothing new here.</p>
 <?php endif; ?>
