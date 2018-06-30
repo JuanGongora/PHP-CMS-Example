@@ -58,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
 
         //$finfo resource returned by finfo_open(), with the second parameter in
-        //finfo_file() being the name of a file to be checked by the HTTP File Upload var`iables
+        //finfo_file() being the name of a file to be checked by the HTTP File Upload variables
         $mime_type = finfo_file($finfo, $_FILES["file"]["tmp_name"]);
         //files uploaded are temporarily saved at: $_FILES["file"]["tmp_name"] of array
 
@@ -77,14 +77,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         //replaces any characters that shouldn't be allowed, with last argument $base being the file to apply the function into
         $base = preg_replace('/[^a-zA-Z0-9_-]/', '_', $base);
 
+        //mb_substr gets part of string to check range of filename is within set limit
+        $base = mb_substr($base, 0, 200);
+
         //rebuild sanitized filename to upload into DB
         $filename = $base . "." . $pathinfo["extension"];
 
         $destination = "../uploads/$filename";
 
+        $i = 1;
+
+        while (file_exists($destination)) {
+
+            //rebuild sanitized filename to upload into DB, using incrementer incase a user uploads same name file
+            $filename = $base . "-{$i}." . $pathinfo["extension"];
+            $destination = "../uploads/$filename";
+
+            $i++;
+        }
+
         //https://stackoverflow.com/questions/37008227/what-is-the-difference-between-name-and-tmp-name/43566165#43566165
        if (move_uploaded_file($_FILES["file"]["tmp_name"], $destination)) {
-           echo "File uploaded successfully";
+
+            if ($article->setImageFile($link, $filename)) {
+
+                Url::redirect("/admin/article.php?id={$article->id}");
+            }
+
        } else {
 
            throw new Exception("Unable to move uploaded file");

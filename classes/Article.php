@@ -9,6 +9,7 @@ class Article {
     public $title;
     public $content;
     public $published_at;
+    public $image_file;
     public $errors;
 
     /**
@@ -44,8 +45,8 @@ class Article {
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
-
     }
+
     /**
      * @param $link
      * @param $id
@@ -146,9 +147,12 @@ class Article {
         $stmt->bindValue(":id", $this->id, PDO::PARAM_INT);
 
         return $stmt->execute();
-
     }
 
+    /**
+     * @param $link
+     * @return bool
+     */
     public function create($link) {
 
         if ($this->validate()) {
@@ -194,5 +198,24 @@ class Article {
         //fetchColumn allows me to grab the requested output from the resulting called column
         return $link->query($sql)->fetchColumn(0);
 
+    }
+
+    /**
+     * @param $link
+     * @param $filename
+     * @return mixed
+     *
+     * this method is called on Article objects, hence it's not static
+     */
+    public function setImageFile($link, $filename) {
+
+        $sql = "UPDATE article SET image_file = :image_file WHERE id = :id";
+
+        $stmt = $link->prepare($sql);
+
+        $stmt->bindValue(":image_file", $filename, PDO::PARAM_STR);
+        $stmt->bindValue(":id", $this->id, PDO::PARAM_INT);
+
+        return $stmt->execute();
     }
 }
