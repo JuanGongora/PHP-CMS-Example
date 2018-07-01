@@ -19,8 +19,10 @@ else {
     die("This is bullshit, try again...");
 }
 
-//test to see if categories get dumped at article edit
-var_dump($article->getCategories($link));
+//given an array of assoc. arrays, this function will return an array of just the values from a chosen column
+$category_ids = array_column($article->getCategories($link), "id");
+
+$categories = Category::getAll($link);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
