@@ -123,19 +123,33 @@ class Article {
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
+    //this is called on an instance of Article, which allows us to call its variable id
     public function setCategories($link, $ids) {
 
         if ($ids) {
-            $sql = "INSERT IGNORE INTO article_category (article_id, category_id) VALUES ({$this->id}, :category_id)";
+
+            $sql = "INSERT IGNORE INTO article_category (article_id, category_id) VALUES ";
+
+            $values = [];
+
+            //dynamically generating values for a sql call
+            foreach ($ids as $id) {
+                $values[] = "({$this->id}, ?)";
+            }
+
+            $sql .= implode(", ", $values);
 
             //you only need to prepare the sql statement once, even though below there are multiple executions for the categories
             $stmt = $link->prepare($sql);
 
-            foreach ($ids as $id) {
-                $stmt->bindValue(":category_id", $id, PDO::PARAM_INT);
-                $stmt->execute();
+            foreach ($ids as $index => $id) {
+
+                $stmt->bindValue($index + 1, $id, PDO::PARAM_INT);
+
             }
+
+            $stmt->execute();
+
         }
     }
 
