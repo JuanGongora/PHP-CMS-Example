@@ -21,6 +21,14 @@ $articles = Article::getPage($link, $paginator->limit, $paginator->offset);
 
         <?php foreach ($articles as $article): ?>
             <h2><a href="article.php?id=<?= $article['id']; ?>"><?= $article["title"]; ?></a></h2>
+            <!-- using the new key assigned to article array to display all assoc. categories -->
+            <?php if ($article["category_names"]): ?>
+            <p>Categories:
+                <?php foreach ($article["category_names"] as $category): ?>
+                    <strong><?= $category ?></strong>
+                <?php endforeach; ?>
+            </p>
+            <?php endif; ?>
             <p><?= $article["content"]; ?></p>
         <?php endforeach; ?>
 

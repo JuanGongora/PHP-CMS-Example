@@ -35,7 +35,17 @@ class Article {
      */
     public static function getPage($link, $limit, $offset) {
 
-        $sql = "SELECT * FROM article ORDER BY published_at LIMIT :limit OFFSET :offset";
+        //the below has a sub query with an alias called "a", this query displays a listing of all articles
+        //with an assigned category, including duplicates if an article has more than one selected category
+        $sql = "SELECT a.*, category.name AS category_name
+                FROM (SELECT * FROM article 
+                ORDER BY published_at 
+                LIMIT :limit 
+                OFFSET :offset) AS a
+                LEFT JOIN  article_category
+                ON a.id = article_category.article_id
+                LEFT JOIN category
+                ON article_category.category_id = category.id";
 
         $stmt = $link->prepare($sql);
 
@@ -44,7 +54,39 @@ class Article {
 
         $stmt->execute();
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        //conglomeration of all articles into one mass array
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $articles = [];
+
+        //this will keep track of existing ids, in order to not display a duplicate as a result of
+        //more than one category to an article, during iteration in the foreach below
+        $previous_id = null;
+
+        foreach ($results as $row) {
+
+            //set article id from each iterated article array of $results
+            $article_id = $row["id"];
+
+            //if the article exits already then it won't display a duplicate
+            if ($article_id != $previous_id) {
+
+                //creating a new key/pair as an empty array for the container of more than one category per article
+                $row["category_names"] = [];
+
+                //assign entire row as the value to the correct article id, that was previously fetched from $row itself
+                $articles[$article_id] = $row;
+            }
+
+            //assigning to new array the category names (doing var_dump($articles[$article_id]); will show you one full article)
+            $articles[$article_id]["category_names"][] = $row["category_name"];
+
+            //to keep track of duplicates during iteration
+            $previous_id = $article_id;
+        }
+
+        //the new array is cleaned and completed
+        return $articles;
     }
 
     /**
