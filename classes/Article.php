@@ -151,6 +151,30 @@ class Article {
             $stmt->execute();
 
         }
+
+        $sql = "DELETE FROM article_category WHERE article_id = {$this->id}";
+
+        if ($ids) {
+
+            //generates the amount of placeholders needed to update the individual categories (either for deleting or inserting)
+            $placeholders = array_fill(0, count($ids), "?");
+
+
+            //lets the call delete any categories that have not been related in the latest update, as a measure
+            //for removing a category which may have previously existed within the article, but the user no longer
+            //wants to keep that relation at update time through unchecking #=> http://beginner-sql-tutorial.com/sql-not-in.html
+            $sql .= " AND category_id NOT IN (" .implode(", ", $placeholders) . ")";
+
+        }
+
+        //you only need to prepare the sql statement once, even though below there are multiple bindings below
+        $stmt = $link->prepare($sql);
+
+        foreach ($ids as $index => $id) {
+            $stmt->bindValue($index + 1, $id, PDO::PARAM_INT);
+        }
+
+        $stmt->execute();
     }
 
 
