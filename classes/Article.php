@@ -75,7 +75,7 @@ class Article {
 
 
     /**
-     * Get the article record based on the ID alon with assoc. categories, if any
+     * Get the article record based on the ID along with assoc. categories, if any
      *
      * @param $link the database
      * @param $id for article
@@ -123,7 +123,13 @@ class Article {
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    //this is called on an instance of Article, which allows us to call its variable id
+
+    /**
+     * this is called on an instance of Article, which allows us to call its variable id
+     *
+     * @param $link to DB
+     * @param $ids collection of selected/de-selected categories
+     */
     public function setCategories($link, $ids) {
 
         if ($ids) {
@@ -167,7 +173,7 @@ class Article {
 
         }
 
-        //you only need to prepare the sql statement once, even though below there are multiple bindings below
+        //you only need to prepare the sql statement once, even though below there are multiple bindings
         $stmt = $link->prepare($sql);
 
         foreach ($ids as $index => $id) {

@@ -19,7 +19,7 @@ else {
     die("This is bullshit, try again...");
 }
 
-//given an array of assoc. arrays, this function will return an array of just the values from a chosen column
+//given an array of assoc. arrays, this function will return an array of just the values from a chosen column (if there's pre-existing selected categories)
 $category_ids = array_column($article->getCategories($link), "id");
 
 $categories = Category::getAll($link);

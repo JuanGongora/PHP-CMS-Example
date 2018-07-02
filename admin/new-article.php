@@ -7,17 +7,24 @@ Auth::requireLogin();
 
 $article = new Article();
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+$category_ids = [];
 
-    $link = require "../includes/db.php";
+$link = require "../includes/db.php";
+
+$categories = Category::getAll($link);
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $article->title = $_POST["title"];
     $article->content = $_POST["content"];
     //extra content added below in order to resolve compatibility issue with other browsers
     $article->published_at = str_replace('T', ' ', $_POST['published_at']);
+    $category_ids = $_POST["category"] ?? [];
 
 
     if ($article->create($link)) {
+
+        $article->setCategories($link, $category_ids);
 
         Url::redirect("/admin/article.php?id={$article->id}");
 
