@@ -30,9 +30,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $article->content = $_POST["content"];
     //extra content added below in order to resolve compatibility issue with other browsers
     $article->published_at = str_replace('T', ' ', $_POST['published_at']);
+    //if a category is selected, set it to its input, if null then set to empty array value
+    $category_ids = $_POST["category"] ?? [];
 
 
         if ($article->update($link)) {
+
+            $article->setCategories($link, $category_ids);
 
             Url::redirect("/admin/article.php?id={$article->id}");
 
