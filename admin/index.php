@@ -24,7 +24,7 @@ $articles = Article::getPage($link, $paginator->limit, $paginator->offset);
         <p>There's nothing new here.</p>
     <?php else: ?>
 
-    <table>
+    <table class="table">
         <thead>
             <th>Title</th>
             <th>Published</th>
