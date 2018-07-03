@@ -48,3 +48,26 @@ $("#formArticle").validate({
        }
    }
 });
+
+$("button.publish").on("click", function (e) {
+
+    //$this variable represents the button class being clicked, with the .data function
+    //passing in the name of the data attribute we want, without the 'data' prefix
+    var id = $(this).data("id");
+
+    //using this to later reference the <td> tag which encapsulates its operation
+    var button = $(this);
+
+    //use ajax to direct to article id of page as a post request
+    $.ajax({
+        url: '/admin/publish-article.php',
+        type: 'POST',
+        data: {id: id}
+    })
+        .done(function (data) {
+
+            //selecting the <td> tag, then passing in the data from the enclosed request
+            //which replaces the content within the <td> with the <time> element from ajax
+            button.parent().html(data);
+        });
+});

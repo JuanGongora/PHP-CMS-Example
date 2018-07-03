@@ -383,4 +383,29 @@ class Article {
 
         return $stmt->execute();
     }
+
+    /**
+     * Publish the article, setting the published_at field to the current date and time
+     *
+     * @param object $conn Connection to the database
+     *
+     * @return mixed The published at date and time if successful, null otherwise
+     */
+    public function publish($link) {
+
+        $sql = "UPDATE article
+                SET published_at = :published_at
+                WHERE id = :id";
+
+        $stmt = $link->prepare($sql);
+
+        $stmt->bindValue(":id", $this->id, PDO::PARAM_INT);
+
+        $published_at = date("Y-m-d H:i:s");
+        $stmt->bindValue(":published_at", $published_at, PDO::PARAM_STR);
+
+        if ($stmt->execute()) {
+            return $published_at;
+        }
+    }
 }

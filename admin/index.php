@@ -37,7 +37,7 @@ $articles = Article::getPage($link, $paginator->limit, $paginator->offset);
                 <?php if ($article["published_at"]) : ?>
                     <td><time><?= $article["published_at"]; ?></time></td>
                 <?php else: ?>
-                <td><em>Unpublished</em></td>
+                    <td><em>Unpublished</em> <button class="publish" data-id="<?= $article["id"] ?>">Publish</button></td>
                 <?php endif; ?>
 
             </tr>
