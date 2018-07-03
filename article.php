@@ -22,6 +22,12 @@ if (isset($_GET["id"])) {
     <!-- doing var_dump($article); will show that internal array is at index 0 -->
     <h2><?= htmlspecialchars($article[0]["title"]); ?></h2>
 
+    <!-- machine readable datetime is in attribute -->
+    <time datetime="<?php echo $article[0]["published_at"]; ?>"><?php
+        $datetime = new DateTime($article[0]["published_at"]);
+        echo $datetime->format("F j, Y");
+        ?></time>
+
     <?php if ($article[0]["category_name"]): ?>
         <p>Categories:
             <?php foreach ($article as $internal_arr) : ?>

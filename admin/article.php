@@ -25,6 +25,12 @@ if (isset($_GET["id"])) {
     <!-- doing var_dump($article); will show that internal array is at index 0 -->
     <h2><?= htmlspecialchars($article[0]["title"]); ?></h2>
 
+    <?php if ($article[0]["published_at"]) : ?>
+        <td><time><?= $article[0]["published_at"]; ?></time></td>
+    <?php else: ?>
+        <td><em>Unpublished</em></td>
+    <?php endif; ?>
+
     <?php if ($article[0]["category_name"]): ?>
         <p>Categories:
             <?php foreach ($article as $internal_arr) : ?>

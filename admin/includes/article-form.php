@@ -22,7 +22,7 @@
     <div>
         <label for="published_at">Publication Date and Time</label>
         <!-- extra content added below in order to resolve compatibility issue with other browsers -->
-        <input type="datetime-local" name="published_at" id="published_at" value="<?= htmlspecialchars(str_replace(' ', 'T', $article->published_at)); ?>">
+        <input type="datetime-local" name="published_at" id="published_at" value="<?= htmlspecialchars(str_replace(' ', 'T', $article->published_at)); ?>"> Format: 2018-01-01 00:00:00
     </div>
 
     <fieldset>

@@ -20,7 +20,14 @@ $articles = Article::getPage($link, $paginator->limit, $paginator->offset, true)
     <?php else: ?>
 
         <?php foreach ($articles as $article): ?>
-            <h2><a href="article.php?id=<?= $article['id']; ?>"><?= $article["title"]; ?></a></h2>
+            <h2><a href="article.php?id=<?= $article['id']; ?>"><?= htmlspecialchars($article["title"]); ?></a></h2>
+
+            <!-- machine readable datetime is in attribute -->
+            <time datetime="<?php echo $article["published_at"]; ?>"><?php
+                $datetime = new DateTime($article["published_at"]);
+                echo $datetime->format("F j, Y");
+                ?></time>
+
             <!-- using the new key assigned to article array to display all assoc. categories -->
             <?php if ($article["category_names"]): ?>
             <p>Categories:
