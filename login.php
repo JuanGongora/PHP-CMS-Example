@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         Auth::login();
 
-        Url::redirect("/index.html");
+        Url::redirect("/index.php");
 
     } else {
 

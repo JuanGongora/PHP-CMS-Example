@@ -23,5 +23,30 @@ $("a.delete").on("click", function(e) {
     }
 });
 
+//created a custom validator for publication dates
+$.validator.addMethod("dateTime", function(value, element) {
+    return (value == "") || ! isNaN(Date.parse(value));
+}, "Must be a valid date and time!");
+
+/**
+ * form will now dynamically check that all subjects are set, this is all done without checking for validation
+ * through the server as would be required by the PHP logic that was previously set in Article.php, thus its faster
+ * its important to note however, that it's still necesarry to keep the server side validations (like the deletes above)
+ * in case Javascript is turned off by client
+ */
+$("#formArticle").validate({
+   rules: {
+       title: {
+           required: true
+       },
+       content: {
+           required: true
+       },
+       published_at: {
+           dateTime: true
+       }
+   }
+});
+
 
 

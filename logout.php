@@ -4,4 +4,4 @@ require "includes/init.php";
 
 Auth::logout();
 
-Url::redirect("/index.html");
+Url::redirect("/index.php");
