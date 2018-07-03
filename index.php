@@ -6,9 +6,9 @@ require "includes/init.php";
 $link = require "includes/db.php";
 
 //coalescing operator puts conditional WITHIN the argument to see if it should set default pg 1 or requested pg num
-$paginator = new Paginator($_GET["page"] ?? 1, 5, Article::getTotal($link));
+$paginator = new Paginator($_GET["page"] ?? 1, 5, Article::getTotal($link, true));
 
-$articles = Article::getPage($link, $paginator->limit, $paginator->offset);
+$articles = Article::getPage($link, $paginator->limit, $paginator->offset, true);
 
 ?>
 

@@ -33,12 +33,17 @@ class Article {
      * @param $offset
      * @return mixed
      */
-    public static function getPage($link, $limit, $offset) {
+    public static function getPage($link, $limit, $offset, $only_published = false) {
+
+        //this only becomes true if we set its condition outside of the method default
+        $condition = $only_published ? " WHERE published_at IS NOT NULL" : "";
 
         //the below has a sub query with an alias called "a", this query displays a listing of all articles
         //with an assigned category, including duplicates if an article has more than one selected category
         $sql = "SELECT a.*, category.name AS category_name
-                FROM (SELECT * FROM article 
+                FROM (SELECT * 
+                FROM article
+                $condition
                 ORDER BY published_at 
                 LIMIT :limit 
                 OFFSET :offset) AS a
@@ -123,7 +128,7 @@ class Article {
      * @param $id for article
      * @return mixed article data with categories
      */
-    public static function getWithCategories($link, $id) {
+    public static function getWithCategories($link, $id, $only_published = false) {
 
         $sql = "SELECT article.*, category.name AS category_name
                 FROM article 
@@ -132,6 +137,10 @@ class Article {
                 LEFT JOIN category 
                 ON article_category.category_id = category.id 
                 WHERE article.id = :id";
+
+        if ($only_published) {
+            $sql .= " AND article.published_at IS NOT NULL";
+        }
 
         $stmt = $link->prepare($sql);
 
@@ -343,9 +352,12 @@ class Article {
      *
      * @return integer of total records
      */
-    public static function getTotal($link) {
+    public static function getTotal($link, $only_published = false) {
 
-        $sql = "SELECT COUNT(*) FROM article";
+        //this only becomes true if we set its condition outside of the method default
+        $condition = $only_published ? " WHERE published_at IS NOT NULL" : "";
+
+        $sql = "SELECT COUNT(*) FROM article{$condition}";
 
         //query and fetchColumn are object methods from PDO, as $link becomes a child of PDO
         //fetchColumn allows me to grab the requested output from the resulting called column

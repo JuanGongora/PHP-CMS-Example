@@ -13,6 +13,7 @@ $("a.delete").on("click", function(e) {
     if (confirm("Are you sure?")) {
 
         //creates an html form element on the fly in order to reference a post method
+        //JavaScript creates a form in code and submits that to the URL in the href attribute of the link (forms are not actioned through urls but with JS we are able to do this)
         var frm = $("<form>");
         frm.attr('method', 'post');
         //this is creating an action that links to a delete url that is described in the id tag that #delete-article comes from (delete-article.php)
@@ -47,6 +48,3 @@ $("#formArticle").validate({
        }
    }
 });
-
-
-

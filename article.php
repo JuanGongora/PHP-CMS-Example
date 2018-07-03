@@ -6,7 +6,7 @@ if (isset($_GET["id"])) {
 
     $link = require "includes/db.php";
 
-    $article = Article::getWithCategories($link, $_GET["id"]);
+    $article = Article::getWithCategories($link, $_GET["id"], true);
 
     } else {
 
