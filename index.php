@@ -19,8 +19,11 @@ $articles = Article::getPage($link, $paginator->limit, $paginator->offset, true)
         <p>There's nothing new here.</p>
     <?php else: ?>
 
-        <?php foreach ($articles as $article): ?>
-            <h2><a href="article.php?id=<?= $article['id']; ?>"><?= htmlspecialchars($article["title"]); ?></a></h2>
+    <ul id="index">
+        <?php foreach ($articles as $article) : ?>
+            <li>
+                <article>
+                    <h2><a href="article.php?id=<?= $article['id']; ?>"><?= htmlspecialchars($article['title']); ?></a></h2>
 
             <!-- machine readable datetime is in attribute -->
             <time datetime="<?php echo $article["published_at"]; ?>"><?php
@@ -32,12 +35,15 @@ $articles = Article::getPage($link, $paginator->limit, $paginator->offset, true)
             <?php if ($article["category_names"]): ?>
             <p>Categories:
                 <?php foreach ($article["category_names"] as $category): ?>
-                    <strong><?= $category ?></strong>
+                    <strong><?= htmlspecialchars($category) ?></strong>
                 <?php endforeach; ?>
             </p>
             <?php endif; ?>
-            <p><?= $article["content"]; ?></p>
+            <p><?= htmlspecialchars($article["content"]); ?></p>
+                </article>
+            </li>
         <?php endforeach; ?>
+    </ul>
 
     <?php require "includes/pagination.php"; ?>
 
