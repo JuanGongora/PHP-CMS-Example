@@ -69,7 +69,11 @@ $("button.publish").on("click", function (e) {
             //selecting the <td> tag, then passing in the data from the enclosed request
             //which replaces the content within the <td> with the <time> element from ajax
             button.parent().html(data);
-        });
+        })
+        .fail(function (data) {
+
+        alert("An error occurred");
+    });
 });
 
 //used to call the jquery plugin for date/time by the id attribute
