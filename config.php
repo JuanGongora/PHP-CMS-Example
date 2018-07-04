@@ -15,3 +15,6 @@ define("DB_PASS", "pass");
 define("SMTP_HOST", "mail.example.com");
 define("SMTP_USER", "user@example.com");
 define("SMTP_PASS", "pass");
+
+//when site is in production this value should be set to false
+define("SHOW_ERROR_DETAIL", true);

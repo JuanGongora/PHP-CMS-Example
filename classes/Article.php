@@ -42,7 +42,7 @@ class Article {
         //with an assigned category, including duplicates if an article has more than one selected category
         $sql = "SELECT a.*, category.name AS category_name
                 FROM (SELECT * 
-                FROM articl
+                FROM article
                 $condition
                 ORDER BY published_at 
                 LIMIT :limit 
