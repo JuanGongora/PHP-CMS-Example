@@ -1,10 +1,18 @@
 <?php
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'vendor/PHPMailer/src/Exception.php';
+require 'vendor/PHPMailer/src/PHPMailer.php';
+require 'vendor/PHPMailer/src/SMTP.php';
+
 require "includes/init.php";
 
 $email = "";
 $subject = "";
 $message = "";
+$sent = false;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -28,6 +36,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (empty($errors)) {
 
+        $mail = new PHPMailer(true);
+
+        try {
+
+            //TODO: this part you should change to real values when using in production
+            $mail->isSMTP();
+            $mail->Host = 'your mail server';
+            $mail->SMTPAuth = true;
+            $mail->Username = 'username';
+            $mail->Password = 'password';
+            $mail->SMTPSecure = 'tls';
+            $mail->Port = 587;
+
+            //the sender is coming from the SMTP server when posted, not the actual provided email
+            //from the contact form, but we can set the "reply to" to be the provided email address
+            $mail->setFrom('sender@example.com');
+            $mail->addAddress('recipient@example.com');
+            $mail->addReplyTo($email);
+            $mail->Subject = $subject;
+            $mail->Body = $message;
+
+            $mail->send();
+
+            $sent = true;
+
+        } catch (Exception $e) {
+
+            $errors[] = $mail->ErrorInfo;
+
+        }
     }
 }
 
@@ -37,35 +75,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <h2>Contact</h2>
 
-<?php if (!empty($errors)): ?>
+<?php if ($sent): ?>
 
-    <ul>
-        <?php foreach ($errors as $error): ?>
-            <li><?= $error ?></li>
-        <?php endforeach; ?>
-    </ul>
+    <strong>Message sent</strong>
+
+<?php else: ?>
+
+    <?php if (!empty($errors)): ?>
+
+        <ul>
+            <?php foreach ($errors as $error): ?>
+                <li><?= $error ?></li>
+            <?php endforeach; ?>
+        </ul>
+
+    <?php endif; ?>
+
+    <form method="post" id="formContact">
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input class="form-control" name="email" id="email" type="email" placeholder="Your email" value="<?= htmlspecialchars($email) ?>">
+        </div>
+
+        <div class="form-group">
+            <label for="subject">Subject</label>
+            <input class="form-control" name="subject" id="subject" placeholder="Your subject" value="<?= htmlspecialchars($subject) ?>">
+        </div>
+
+        <div class="form-group">
+            <label for="message">Message</label>
+            <textarea class="form-control" name="message" id="message" placeholder="Your message"><?= htmlspecialchars($message) ?></textarea>
+        </div>
+
+        <button class="btn">Send</button>
+
+    </form>
 
 <?php endif; ?>
-
-<form method="post" id="formContact">
-
-    <div class="form-group">
-        <label for="email">Email</label>
-        <input class="form-control" name="email" id="email" type="email" placeholder="Your email" value="<?= htmlspecialchars($email) ?>">
-    </div>
-
-    <div class="form-group">
-        <label for="subject">Subject</label>
-        <input class="form-control" name="subject" id="subject" placeholder="Your subject" value="<?= htmlspecialchars($subject) ?>">
-    </div>
-
-    <div class="form-group">
-        <label for="message">Message</label>
-        <textarea class="form-control" name="message" id="message" placeholder="Your message"><?= htmlspecialchars($message) ?></textarea>
-    </div>
-
-    <button class="btn">Send</button>
-
-</form>
 
 <?php require "includes/footer.php"; ?>
