@@ -387,7 +387,7 @@ class Article {
     /**
      * Publish the article, setting the published_at field to the current date and time
      *
-     * @param object $conn Connection to the database
+     * @param object $link Connection to the database
      *
      * @return mixed The published at date and time if successful, null otherwise
      */

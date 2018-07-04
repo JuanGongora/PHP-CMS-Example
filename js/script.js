@@ -71,3 +71,8 @@ $("button.publish").on("click", function (e) {
             button.parent().html(data);
         });
 });
+
+//used to call the jquery plugin for date/time by the id attribute
+$('#published_at').datetimepicker({
+    format: 'Y-m-d H:i:s'
+});

@@ -6,7 +6,8 @@
     <link rel="stylesheet"href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
           integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
           crossorigin="anonymous">
-    <!-- set after Boostrap to override any of its settings -->
+    <link rel="stylesheet" type="text/css" href="/css/jquery.datetimepicker.min.css">
+    <!-- set after Boostrap and other styles to override any of its settings -->
     <link rel="stylesheet" type="text/css" href="/css/styles.css">
     <title>Blog Site</title>
 </head>
@@ -27,6 +28,8 @@
                 <li class="nav-item"><a class="nav-link" href="/login.php">Log in</a></li>
 
                 <?php endif; ?>
+
+                <li class="nav-item"><a class="nav-link" href="/contact.php">Contact</a></li>
             </ul>
         </nav>
 
