@@ -13,3 +13,5 @@ spl_autoload_register( function($class) {require dirname(__DIR__) . "/classes/{$
 //set sessions here so that anywhere that we want to use a session, we will be able to as a result of inclusion of this file
 
 session_start();
+
+require dirname(__DIR__) . "/config.php";

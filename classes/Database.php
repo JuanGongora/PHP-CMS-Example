@@ -5,19 +5,40 @@
  */
 class Database {
 
+    protected $db_host;
+    protected $db_name;
+    protected $db_user;
+    protected $db_pass;
+
+    /**
+     * Database constructor
+     *
+     * using object instantiaton so that db config constants are not hard coded into method
+     *
+     * @param $host
+     * @param $name
+     * @param $user
+     * @param $password
+     *
+     * @return void
+     */
+    public function __construct($host, $name, $user, $password) {
+
+        $this->db_host = $host;
+        $this->db_name = $name;
+        $this->db_user = $user;
+        $this->db_pass = $password;
+    }
+
     /**
      * @return PDO
      */
     public function getConn() {
-        $db_host = "localhost:3307";
-        $db_name = "cms";
-        $db_user = "cms_www";
-        $db_pass = "pass";
 
-        $dsn = "mysql:host=" .$db_host . ";dbname=" . $db_name . ";charset=utf8";
+        $dsn = "mysql:host=" .$this->db_host . ";dbname=" . $this->db_name . ";charset=utf8";
 
         try {
-            $link = new PDO($dsn, $db_user, $db_pass);
+            $link = new PDO($dsn, $this->db_user, $this->db_pass);
 
             $link->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
