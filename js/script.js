@@ -32,7 +32,7 @@ $.validator.addMethod("dateTime", function(value, element) {
 /**
  * form will now dynamically check that all subjects are set, this is all done without checking for validation
  * through the server as would be required by the PHP logic that was previously set in Article.php, thus its faster
- * its important to note however, that it's still necesarry to keep the server side validations (like the deletes above)
+ * its important to note however, that it's still necessary to keep the server side validations (like the deletes above)
  * in case Javascript is turned off by client
  */
 $("#formArticle").validate({
@@ -75,4 +75,20 @@ $("button.publish").on("click", function (e) {
 //used to call the jquery plugin for date/time by the id attribute
 $('#published_at').datetimepicker({
     format: 'Y-m-d H:i:s'
+});
+
+//same logic as #formArticle above
+$("#formContact").validate({
+   rules: {
+       email: {
+           required: true,
+           email: true
+       },
+       subject: {
+           required: true
+       },
+       message: {
+           required: true
+       }
+   }
 });
